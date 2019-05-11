@@ -1,0 +1,34 @@
+.pokeprofile-evo-item {
+    width: 200px;
+    height: 100%;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.pokeprofile-evo-name {
+    display: inline-block;
+    font-size: 22px;
+    height: 45px;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.pokeprofile-evo-name-active {
+    font-weight: bold;
+}
+
+.pokeprofile-evo-image {
+    float: left;
+    width: 100%;
+    height: calc(100% - 50px);
+    overflow: hidden;
+}
+
+.pokeprofile-evo-image-active {
+    background-color: lightblue;
+    border-radius: 50%;
+}
+
+.pokeprofile-evo-image > img {
+    height: 100%;
+}

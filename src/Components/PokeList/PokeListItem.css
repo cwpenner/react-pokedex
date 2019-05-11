@@ -1,0 +1,37 @@
+.pokelist-item {
+    width: 100%;
+    height: 60px;
+    cursor: pointer;
+    background-color: white;
+}
+
+.pokelist-item:hover {
+    background-color: lightgray;
+}
+
+.pokelist-item-active {
+    background-color: lightblue;
+}
+
+.pokelist-name {
+    float: left;
+    font-size: 20px;
+    position: relative;
+    top: calc(50% - 23px/2);
+    left: 20px;
+}
+
+.pokelist-name-active {
+    font-weight: bold;
+}
+
+.pokelist-image {
+    float: left;
+    height: 60px;
+    padding-left: 20px;
+    overflow: hidden;
+}
+
+.pokelist-image > img {
+    height: 100%;
+}

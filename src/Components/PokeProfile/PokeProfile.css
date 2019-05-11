@@ -1,0 +1,128 @@
+.pokeprofile-main {
+    float: left;
+	text-align: center;
+	width: 100%;
+    height: 100%;
+    background-color: rgb(116, 4, 4);
+    color: yellow;
+}
+
+.pokeprofile-container {
+    position: relative;
+    width: 1320px;
+    height: 100%;
+    left: calc(50% - 660px);
+}
+
+.pokeprofile-header {
+    float: left;
+    width: calc(100% - 40px);
+    height: 60px;
+    padding: 20px;
+}
+
+.pokeprofile-id {
+    float: left;
+    width: 50px;
+    height: 50px;
+    background-color: rgb(4, 4, 134);;
+    border: 5px solid yellow;
+    border-radius: 50px;
+    font-weight: bold;
+}
+
+.pokeprofile-text {
+    font-size: 16px;
+    margin-top: 16px;
+}
+
+.pokeprofile-name {
+    float: left;
+    margin-left: 20px;
+    font-size: 40px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.pokeprofile-description {
+    float: left;
+    width: calc(100% - 450px);
+    font-style: italic;
+    font-size: 20px;
+    margin-left: 100px;
+    margin-top: 24px;
+}
+
+.pokeprofile-image-component {
+    float: left;
+    width: 300px;
+    height: 318px;
+    margin-left: 20px;
+}
+
+.pokeprofile-image {
+    float: left;
+    width: 100%;
+    height: calc(100% - 18px);
+    background-color: white;
+    border-radius: 5px;
+}
+
+.pokeprofile-image > img {
+    height: 100%;
+}
+
+.image-selector {
+    width: 100%;
+}
+
+.pokeprofile-characteristics {
+    float: left;
+    width: 500px;
+}
+
+.pokeprofile-stats {
+    float: left;
+    width: 500px;
+}
+
+.pokeprofile-evochain {
+    float: left;
+    width: 100%;
+    height: 300px;
+    margin-top: 20px;
+}
+
+.pokeprofile-evochain-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    height: calc(100% - 68px);
+}
+
+.evo-arrow {
+    height: 40px;
+    position: relative;
+    top: calc(50% - 40px);
+    font-size: 30px;
+    color: blue;
+    margin: 0 20px;
+}
+
+table {
+    width: 100%;
+}
+
+td:nth-child(odd) {
+    text-align: right;
+    font-weight: bold;
+    width: 50%;
+    padding-right: 10px;
+}
+
+td:nth-child(even) {
+    text-align: left;
+    width: 50%;
+    padding-left: 10px;
+}

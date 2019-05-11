@@ -1,0 +1,18 @@
+.fa-spinner {
+	animation: fa-spinner-spin infinite 1s linear;
+}
+
+.loader {
+	position: relative;
+	top: calc(50% - 25px);
+	font-size: 50px;
+}
+
+@keyframes fa-spinner-spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}

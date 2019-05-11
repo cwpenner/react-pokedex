@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './PokeProfileEvoItem.css';
+import Utilities from '../../Utilities/Utilities';
 
 class PokeProfileEvoItem extends Component {
     // Displays the name and image of a Pokémon in the evolution chain
@@ -19,7 +20,7 @@ class PokeProfileEvoItem extends Component {
                     <img src={imageSource} alt={altText}/>
                 </div>
                 <div className={`pokeprofile-evo-name ${this.props.active && "pokeprofile-evo-name-active"}`}>
-                    {pokemon.name}
+                    {Utilities.toTitleCase(pokemon.name)}
                 </div>
             </div>
         );

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './PokeProfile.css';
 import Utilities from '../../Utilities/Utilities';
 import Loader from '../../Utilities/Loader/Loader';
+import Languages from '../../Utilities/Languages/Languages';
 import PokeProfileEvoItem from './PokeProfileEvoItem';
 
 class PokeProfile extends Component {
@@ -24,7 +25,7 @@ class PokeProfile extends Component {
                         </div>
                     </div>
                     <div className="pokeprofile-name">
-                        {pokemon.name}
+                        {Utilities.toTitleCase(pokemon.name)}
                     </div>
                     <div className="pokeprofile-description">
                         {pokemon.description}
@@ -39,7 +40,7 @@ class PokeProfile extends Component {
         
         if (pokemonTypes) {
             for (let i = 0; i < pokemonTypes.length; i++) {
-                types += pokemonTypes[i];
+                types += Utilities.toTitleCase(pokemonTypes[i]);
     
                 if (i + 1 < pokemonTypes.length) {
                     types += ', ';
@@ -54,20 +55,24 @@ class PokeProfile extends Component {
         if (pokemon) {
             return (
                 <div className="pokeprofile-characteristics">
-                    <h2>Characteristics</h2>
+                    <h2>{Languages.getLocalizedText(this.props.language, 'characteristics')}</h2>
                     <table>
                         <tbody>
                             <tr>
-                                <td>Height:</td><td>{pokemon.height} m</td>
+                                <td>{Languages.getLocalizedText(this.props.language, 'height')}</td>
+                                <td>{pokemon.height} m</td>
                             </tr>
                             <tr>
-                                <td>Weight:</td><td>{pokemon.weight} kg</td>
+                                <td>{Languages.getLocalizedText(this.props.language, 'weight')}</td>
+                                <td>{pokemon.weight} kg</td>
                             </tr>
                             <tr>
-                                <td>Types:</td><td>{this.getTypes(pokemon.types)}</td>
+                                <td>{Languages.getLocalizedText(this.props.language, 'types')}</td>
+                                <td>{this.getTypes(pokemon.types)}</td>
                             </tr>
                             <tr>
-                                <td>Habitat:</td><td>{Utilities.toTitleCase(pokemon.habitat)}</td>
+                                <td>{Languages.getLocalizedText(this.props.language, 'habitat')}</td>
+                                <td>{pokemon.habitat ? Utilities.normalizeText(pokemon.habitat) : 'Unknown'}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -80,27 +85,16 @@ class PokeProfile extends Component {
         if (pokemonStats) {
             return (
                 <div className="pokeprofile-stats">
-                    <h2>Stats</h2>
+                    <h2>{Languages.getLocalizedText(this.props.language, 'stats')}</h2>
                     <table>
                         <tbody>
-                            <tr>
-                                <td>HP:</td><td>{pokemonStats.hp}</td>
-                            </tr>
-                            <tr>
-                                <td>Attack:</td><td>{pokemonStats.attack}</td>
-                            </tr>
-                            <tr>
-                                <td>Defense:</td><td>{pokemonStats.defense}</td>
-                            </tr>
-                            <tr>
-                                <td>Special Attack:</td><td>{pokemonStats.specialAttack}</td>
-                            </tr>
-                            <tr>
-                                <td>Special Defense:</td><td>{pokemonStats.specialDefense}</td>
-                            </tr>
-                            <tr>
-                                <td>Speed:</td><td>{pokemonStats.speed}</td>
-                            </tr>
+                            {Object.keys(pokemonStats).map(statKey => {
+                                return (
+                                    <tr key={statKey}>
+                                        <td>{Utilities.normalizeText(statKey)}</td><td>{pokemonStats[statKey]}</td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </div>
@@ -112,12 +106,14 @@ class PokeProfile extends Component {
         if (pokemonImages) {
             const images = [];
             Object.keys(pokemonImages).forEach(key => {
-                images.push(key);
+                if (pokemonImages[key]) {
+                    images.push(key);
+                }
             });
             return (
                 <select id="images" name="image-selector" className="image-selector" value={this.state.selectedImage} onChange={this.handleChange}>                
                     {images.map(image => {
-                        return <option key={image} value={image}>{Utilities.normalizeText(image)}</option>
+                        return <option key={image} value={image}>{Languages.getLocalizedText(this.props.language, image)}</option>
                     })}
                 </select>
             );
@@ -142,7 +138,7 @@ class PokeProfile extends Component {
                         <img src={imageSource} alt={altText}/> 
                     </div>
                     {this.imageSelector(pokemonImages)}
-                    <label htmlFor="images">Image Selector</label>
+                    <label htmlFor="images">{Languages.getLocalizedText(this.props.language, 'imageSelector')}</label>
                 </div>
             );
         }
@@ -169,7 +165,7 @@ class PokeProfile extends Component {
         if (pokemon && pokemon.evoChain) {
             return (
                 <div className="pokeprofile-evochain">
-                    <h1>Evolution Chain</h1>
+                    <h1>{Languages.getLocalizedText(this.props.language, 'evoChain')}</h1>
                     <div className="pokeprofile-evochain-container">
                         {this.getEvoItem(pokemon)}
                     </div>

@@ -1,7 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## IMPORTANT INSTRUCTIONS
-Open two terminal tabs.
+Open two terminal tabs. //TODO: update with instructions on production build
 In the first terminal tab, run `npm start` to start the client.
 In the second terminal tab, run `npm run server` to start the backend server.
 

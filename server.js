@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request-promise');
+const path = require('path');
+const compression = require('compression');
 
 const app = express();
 const port = 5000;
@@ -8,6 +10,14 @@ const pokeAPIUrlBase = 'https://pokeapi.co/api/v2/';
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(compression());
+
+// app.use(express.static(path.join(__dirname, 'build'))); //TODO: uncomment for production
+
+// app.get('/', (req, res) => {
+// 	res.sendFile(path.join(__dirname, 'build', 'index.html')); //TODO: uncomment for production
+// });
 
 // Helper Methods
 async function getEvolutionChain(evoChain, evoArray, lang) {
@@ -67,68 +77,65 @@ async function getPokemonDetailsInfo(pokemonUrl, lang) {
 	pokemon.images = detailsData.sprites;
 
 	// Process Stats
-	for (const stat of detailsData.stats) {
-		const statOptions = {
-			uri: stat.stat.url,
-			method: 'GET',
-			json: true
-		};
-		const statData = await request.get(statOptions);
-
-		if (!statData) {
-			console.log('Error getting stat data of Pokémon');
-		} else {
-			statData.names.forEach(name => {
-				if (name.language.name === lang) {
-					const statName = name.name;
-					switch (statName) {
-						case "HP":
-							pokemon.stats.hp = stat.base_stat;
-							break;
-						case "Attack":
-							pokemon.stats.attack = stat.base_stat;
-							break;
-						case "Defense":
-							pokemon.stats.defense = stat.base_stat;
-							break;
-						case "Special Attack":
-							pokemon.stats.specialAttack = stat.base_stat;
-							break;
-						case "Special Defense":
-							pokemon.stats.specialDefense = stat.base_stat;
-							break;
-						case "Speed":
-							pokemon.stats.speed = stat.base_stat;
-							break;
-						default:
-							console.log('Invalid stat', statName);
-					}
-				}
+	if (detailsData.stats) {
+		if (lang === 'en') {
+			detailsData.stats.forEach(stat => {
+				pokemon.stats[stat.stat.name] = stat.base_stat;
 			});
+		} else {
+			for (const stat of detailsData.stats) {
+				const statOptions = {
+					uri: stat.stat.url,
+					method: 'GET',
+					json: true
+				};
+				const statData = await request.get(statOptions);
+		
+				if (!statData) {
+					console.log('Error getting stat data of Pokémon');
+				} else {
+					statData.names.forEach(name => {
+						if (name.language.name === lang) {
+							const statName = name.name;
+							pokemon.stats[statName] = stat.base_stat;
+						}
+					});
+				}
+			}
 		}
 	}
 	
 	// Process Types
-	for (const type of detailsData.types) {
-		const typeOptions = {
-			uri: type.type.url,
-			method: 'GET',
-			json: true
-		};
-		const typeData = await request.get(typeOptions);
-		if (!typeData) {
-			console.log('Error getting type data of Pokémon');
-		} else {
-			typeData.names.forEach(name => {
-				if (name.language.name === lang) {
-					pokemon.types.push(name.name);
-				}
+	if (detailsData.types) {
+		if (lang === 'en') {
+			detailsData.types.forEach(type => {
+				pokemon.types.push(type.type.name);
 			});
+		} else {
+			for (const type of detailsData.types) {
+				const typeOptions = {
+					uri: type.type.url,
+					method: 'GET',
+					json: true
+				};
+				const typeData = await request.get(typeOptions);
+				if (!typeData) {
+					console.log('Error getting type data of Pokémon');
+				} else {
+					typeData.names.forEach(name => {
+						if (name.language.name === lang) {
+							pokemon.types.push(name.name);
+						}
+					});
+				}
+			}
 		}
 	}
 
 	// Get Species URL
-	pokemon.speciesUrl = detailsData.species.url;
+	if (detailsData.species) {
+		pokemon.speciesUrl = detailsData.species.url;
+	}
 	
 	return pokemon;
 }
@@ -156,11 +163,15 @@ async function getPokemonSpeciesInfo(speciesUrl, lang, getEvoChain) {
 	}
 
 	// Process Name
-	speciesData.names.forEach(name => {
-		if (name.language.name === lang) {
-			pokemon.name = name.name;
-		}
-	});
+	if (lang === 'en') {
+		pokemon.name = speciesData.name;
+	} else {
+		speciesData.names.forEach(name => {
+			if (name.language.name === lang) {
+				pokemon.name = name.name;
+			}
+		});
+	}
 
 	// Process Descriptions
 	speciesData.flavor_text_entries.forEach(desc => {
@@ -171,21 +182,25 @@ async function getPokemonSpeciesInfo(speciesUrl, lang, getEvoChain) {
 
 	// Process Habitat
 	if (speciesData.habitat) {
-		const habitatOptions = {
-			uri: speciesData.habitat.url,
-			method: 'GET',
-			json: true
-		};
-		const habitatData = await request.get(habitatOptions);
-	
-		if (!habitatData) {
-			console.log('Error getting habitat data of Pokémon');
+		if (lang === 'en') {
+			pokemon.habitat = speciesData.habitat.name;
 		} else {
-			habitatData.names.forEach(name => {
-				if (name.language.name === lang) {
-					pokemon.habitat = name.name;
-				}
-			});
+			const habitatOptions = {
+				uri: speciesData.habitat.url,
+				method: 'GET',
+				json: true
+			};
+			const habitatData = await request.get(habitatOptions);
+		
+			if (!habitatData) {
+				console.log('Error getting habitat data of Pokémon');
+			} else {
+				habitatData.names.forEach(name => {
+					if (name.language.name === lang) {
+						pokemon.habitat = name.name;
+					}
+				});
+			}
 		}
 	}
 
@@ -245,21 +260,42 @@ app.get('/pokemon/getLanguages', async (req, res) => {
 
 app.get('/pokemon/list', async (req, res) => {
 	try {
-		const listPokemonUrl = pokeAPIUrlBase + 'pokedex/1';
+		const listPokemonUrl = pokeAPIUrlBase + 'pokedex/1/';
 		const lang = req.query.lang;
-		//TODO: handle multiple languages
 
 		const listOptions = {
 			uri: listPokemonUrl,
 			method: 'GET',
 			json: true
 		};
-		const listData = await request.get(listOptions);
+		let listData = await request.get(listOptions);
 		
 		if (!listData) {
 			console.log('Error getting list of Pokémon');
 			res.send(null);
 		} else {
+			if (lang !== 'en') {
+				// Get all Pokémon names in chosen language
+				for (let i = 0; i < listData.pokemon_entries.length; i++) {
+					const pokemon = listData.pokemon_entries[i];
+
+					const nameOptions = {
+						uri: pokemon.pokemon_species.url,
+						method: 'GET',
+						json: true
+					};
+					const speciesData = await request.get(nameOptions);
+
+					if (speciesData) {
+						speciesData.names.forEach(name => {
+							if (name.language.name === lang) {
+								listData.pokemon_entries[i].pokemon_species.name = name.name;
+							}
+						});
+					}
+				}
+			}
+
 			res.send(listData);
 		}
 	} catch (e) {

@@ -11,7 +11,12 @@ export default class Utilites {
 
     static normalizeText(text) {
         if (text) {
-            return text.replace(/_/g, ' ');
+            let words = text.split(/[_-]/);
+            words = words.map(word => {
+                return this.toTitleCase(word);
+            });
+            const newText = words.join(' ');
+            return newText;
         }
     }
 }

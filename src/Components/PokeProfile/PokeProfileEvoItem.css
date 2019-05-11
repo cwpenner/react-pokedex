@@ -22,11 +22,15 @@
     width: 100%;
     height: calc(100% - 50px);
     overflow: hidden;
+    border-radius: 50%;
+}
+
+.pokeprofile-evo-image:hover {
+    background-color: lightgray;
 }
 
 .pokeprofile-evo-image-active {
     background-color: lightblue;
-    border-radius: 50%;
 }
 
 .pokeprofile-evo-image > img {

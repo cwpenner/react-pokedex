@@ -1,7 +1,5 @@
-const self = this;
-
 export default () => {
-    self.addEventListener('message', event => {
+    self.addEventListener('message', event => { // eslint-disable-line no-restricted-globals
         if (!event) {
             return;
         }
@@ -20,7 +18,7 @@ export default () => {
     async function downloadAll(lang) {
         // Begins downloading all Pokémon in a specified language for offline use
 
-        const base = self.origin;
+        const base = this.origin;
         const response = await fetch(base + '/pokemon/list?lang=' + lang);
         const data = await response.json();
 
@@ -42,7 +40,7 @@ export default () => {
         // Downloads individual Pokémon and updates progress on front end
         // When complete, sends Pokémon info to front end to be stored locally
 
-        const base = self.origin;
+        const base = this.origin;
         const response = await fetch(base + '/pokemon/view?id=' + id + '&lang=' + lang);
         const data = await response.json();
 

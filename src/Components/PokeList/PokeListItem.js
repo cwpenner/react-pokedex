@@ -6,6 +6,8 @@ class PokeListItem extends Component {
     // Displays the name and image of a Pokémon as a list item
     
     pokemonClicked = () => {
+        // Sends the selected Pokémon to the parent
+        
         this.props.selectPokemon(this.props.number);
     }
     

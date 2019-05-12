@@ -1,4 +1,6 @@
 export default class Utilites {
+    // Collection of string formatting methods and other functions
+    
     static toTitleCase(text) {
         if (text) {
             if (text.length > 1) {

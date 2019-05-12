@@ -7,6 +7,8 @@ class PokeList extends Component {
     // Displays a list of Pokémon fetched using the PokéAPI
     
     selectPokemon = (id) => {
+        // Sends the selected Pokémon to the parent
+        
         this.props.selectPokemon(id);
     }
 

@@ -7,6 +7,8 @@ import WebWorker from './Workers/WebWorker';
 import Languages from './Utilities/Languages/Languages'
 
 class App extends React.Component {
+    // Main app
+
     worker;
 
 	constructor() {
@@ -27,7 +29,7 @@ class App extends React.Component {
 	}
 
 	componentDidMount() {
-        // Create Background Worker
+        // Create background Worker to handle background downloading
         this.worker = new WebWorker(worker);
         this.worker.addEventListener('message', event => {
             if (event.data.message === 'listDownloaded') {
@@ -50,6 +52,7 @@ class App extends React.Component {
             }
         });
 
+        // Get previous settings from local storage, if available
         let lang = localStorage.getItem('lang');
         let selectedPokemonId = localStorage.getItem('selectedPokemonId');
 
@@ -65,12 +68,15 @@ class App extends React.Component {
             selectedPokemonId = this.state.selectedPokemonId;
         }
 
+        // Update language list, Pokémon list, and selected Pokémon info
         this.getLanguages();
         this.getPokedexInfo(lang);
         this.getPokemonInfo(selectedPokemonId, lang);
     }
 
     handleChange = (event) => {
+        // Handles the language change dropdown
+
         const {name, value} = event.target;
 
 		this.setState({
@@ -83,11 +89,13 @@ class App extends React.Component {
     }
     
     async getPokedexInfo(lang) {
+        // Gets the list of Pokémon to display
+
         this.setState({ listLoading: true });
         
         const list = localStorage.getItem('list-' + lang);
 
-        if (list) {
+        if (list) { // Load from local storage if available
             this.setState({
                 list: JSON.parse(list)
             });
@@ -102,6 +110,8 @@ class App extends React.Component {
                     this.setState({
                         list: data.pokemon_entries
                     });
+
+                    // Store list locally for faster page reloads
                     localStorage.setItem('list-' + lang, JSON.stringify(data.pokemon_entries));
                     this.setState({ listLoading: false });
                 }
@@ -110,11 +120,13 @@ class App extends React.Component {
     }
 
     async getPokemonInfo(id, lang) {
+        // Gets the info for the selected Pokémon
+
         this.setState({ profileLoading: true });
         
         const pokemon = localStorage.getItem(id + '-' + lang);
 
-        if (pokemon) {
+        if (pokemon) { // Load from local storage if available
             this.setState({
                 selectedPokemon: JSON.parse(pokemon)
             });
@@ -127,6 +139,8 @@ class App extends React.Component {
                 this.setState({
                     selectedPokemon: data
                 });
+
+                // Store Pokémon info locally for faster page reloads
                 localStorage.setItem(data.number + '-' + lang, JSON.stringify(data));
             }
         }
@@ -135,15 +149,19 @@ class App extends React.Component {
     }
     
     selectPokemon = (id) => {
+        // Changes actively selected Pokémon
+
         this.setState({ selectedPokemonId: id });
         localStorage.setItem('selectedPokemonId', id);
         this.getPokemonInfo(id, this.state.language);
     }
 
     async getLanguages() {
+        // Gets the list of languages the API works with
+
         const langs = localStorage.getItem('languages');
 
-        if (langs) {
+        if (langs) { // Load from local storage if available
             this.setState({ languages: JSON.parse(langs) });
         } else {
             const response = await fetch('/pokemon/getLanguages');
@@ -154,6 +172,7 @@ class App extends React.Component {
                 const languages = [];
                 data.results.forEach(lang => {
                     if (Languages.supportedLanguages.includes(lang.name)) {
+                        // Only present languages the app has been translated in
                         languages.push(lang.name);
                     }
                 });
@@ -164,6 +183,8 @@ class App extends React.Component {
     }
 
     dropdown() {
+        // Language dropdown
+        
         return (
             <select id="language" name="language" className="lang-dropdown" value={this.state.language} onChange={this.handleChange}>                
                 {this.state.languages.map(lang => {
@@ -175,6 +196,7 @@ class App extends React.Component {
 
     downloadAll = () => {
         // Download all Pokémon into localStorage for offline use
+
         this.setState({
             downloading: true
         });

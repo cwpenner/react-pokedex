@@ -6,6 +6,8 @@ class PokeProfileEvoItem extends Component {
     // Displays the name and image of a Pokémon in the evolution chain
 
     pokemonClicked = () => {
+        // Sends the selected Pokémon to the parent
+        
         this.props.selectPokemon(this.props.pokemon.number);
     }
     

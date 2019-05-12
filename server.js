@@ -11,16 +11,20 @@ const pokeAPIUrlBase = 'https://pokeapi.co/api/v2/';
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Compress text for better performance
 app.use(compression());
 
-// app.use(express.static(path.join(__dirname, 'build'))); //TODO: uncomment for production
+// Has the server render the optimzed web app build files
+app.use(express.static(path.join(__dirname, 'build')));
 
-// app.get('/', (req, res) => {
-// 	res.sendFile(path.join(__dirname, 'build', 'index.html')); //TODO: uncomment for production
-// });
+app.get('/', (req, res) => {
+	res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 // Helper Methods
 async function getEvolutionChain(evoChain, evoArray, lang) {
+	// Recursive function to get Evolution Chain
+
 	const pokemon = await getFullPokemonInfoFromSpeciesUrl(evoChain.species.url, lang, false);
 	evoArray.push(pokemon);
 
@@ -33,6 +37,8 @@ async function getEvolutionChain(evoChain, evoArray, lang) {
 }
 
 async function getFullPokemonInfoFromDetailsUrl(detailsUrl, lang, getEvoChain) {
+	// Gets full details when starting with a '/pokemon/' url
+
 	const detailsInfo = await getPokemonDetailsInfo(detailsUrl, lang);
 	const speciesInfo = await getPokemonSpeciesInfo(detailsInfo.speciesUrl, lang, getEvoChain);
 	const pokemon = {...detailsInfo, ...speciesInfo};
@@ -41,6 +47,8 @@ async function getFullPokemonInfoFromDetailsUrl(detailsUrl, lang, getEvoChain) {
 }
 
 async function getFullPokemonInfoFromSpeciesUrl(speciesUrl, lang, getEvoChain) {
+	// Gets full details when starting with a '/pokemon-species/' url
+
 	const speciesInfo = await getPokemonSpeciesInfo(speciesUrl, lang, getEvoChain);
 	const detailsInfo = await getPokemonDetailsInfo(speciesInfo.detailsUrl, lang);
 	const pokemon = {...detailsInfo, ...speciesInfo};
@@ -49,6 +57,8 @@ async function getFullPokemonInfoFromSpeciesUrl(speciesUrl, lang, getEvoChain) {
 }
 
 async function getPokemonDetailsInfo(pokemonUrl, lang) {
+	// Gets the number, height, weight, types, images, stats, and species URL
+
 	const pokemon = {
 		number: 0,
 		height: 0,
@@ -141,7 +151,8 @@ async function getPokemonDetailsInfo(pokemonUrl, lang) {
 }
 
 async function getPokemonSpeciesInfo(speciesUrl, lang, getEvoChain) {
-	// Get name, description, evochain, and habitat
+	// Gets the name, description, evochain, habitat, and details URL
+	
 	const pokemon = {
 		name: '',
 		habitat: '',
@@ -234,7 +245,6 @@ async function getPokemonSpeciesInfo(speciesUrl, lang, getEvoChain) {
 }
 
 // Main Routing
-
 app.get('/pokemon/getLanguages', async (req, res) => {
 	try {
 		const languagePokemonUrl = pokeAPIUrlBase + 'language';

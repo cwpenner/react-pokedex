@@ -18,6 +18,8 @@ export default () => {
     });
     
     async function downloadAll(lang) {
+        // Begins downloading all Pokémon in a specified language for offline use
+
         const base = self.origin;
         const response = await fetch(base + '/pokemon/list?lang=' + lang);
         const data = await response.json();
@@ -37,6 +39,9 @@ export default () => {
     }
 
     async function downloadPokemon(id, lang, total) {
+        // Downloads individual Pokémon and updates progress on front end
+        // When complete, sends Pokémon info to front end to be stored locally
+
         const base = self.origin;
         const response = await fetch(base + '/pokemon/view?id=' + id + '&lang=' + lang);
         const data = await response.json();

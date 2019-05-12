@@ -1,4 +1,6 @@
 export default class Languages {
+    // Contains the supported language string localizations
+
     static languages = {
         en: {
             language: 'Language',

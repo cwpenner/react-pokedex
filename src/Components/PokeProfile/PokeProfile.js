@@ -8,6 +8,8 @@ import PokeProfileEvoItem from './PokeProfileEvoItem';
 class PokeProfile extends Component {
     // Displays profile information for the selected Pokémon, including:
     // Name, description, image, evolution chain, habitat, and stats
+    // Uses localized text from Language utility for translating into different languages
+
     constructor() {
         super();
         this.state = {
@@ -16,6 +18,8 @@ class PokeProfile extends Component {
     }
 
     getHeader(pokemon) {
+        // Loads the header with Pokémon name, number, and description
+
         if (pokemon) {
             return (
                 <div className="pokeprofile-header">
@@ -36,6 +40,8 @@ class PokeProfile extends Component {
     }
 
     getTypes(pokemonTypes) {
+        // Outputs a list of Pokémon types
+
         let types = '';
         
         if (pokemonTypes) {
@@ -52,6 +58,8 @@ class PokeProfile extends Component {
     }
 
     getCharacteristics(pokemon) {
+        // Loads the characteristics of the Pokémon
+
         if (pokemon) {
             return (
                 <div className="pokeprofile-characteristics">
@@ -82,6 +90,8 @@ class PokeProfile extends Component {
     }
 
     getStats(pokemonStats) {
+        // Loads the stats of the Pokémon
+
         if (pokemonStats) {
             return (
                 <div className="pokeprofile-stats">
@@ -103,6 +113,8 @@ class PokeProfile extends Component {
     }
 
     imageSelector(pokemonImages) {
+        // Loads the image selector
+
         if (pokemonImages) {
             const images = [];
             Object.keys(pokemonImages).forEach(key => {
@@ -121,6 +133,8 @@ class PokeProfile extends Component {
     }
 
     handleChange = (event) => {
+        // Handles the image selector change
+
         const {value} = event.target;
 
 		this.setState({
@@ -129,6 +143,8 @@ class PokeProfile extends Component {
 	}
 
     getImages(pokemonImages) {
+        // Loads the image component
+
         if (pokemonImages) {
             const altText = Utilities.normalizeText(this.state.selectedImage) + ' image of ' + this.props.pokemon.name;
             const imageSource = pokemonImages[this.state.selectedImage];
@@ -145,6 +161,8 @@ class PokeProfile extends Component {
     }
 
     getEvoItem(pokemon) {
+        // Outputs the Evolution Chain items
+
         const evoList = [];
 
         if (pokemon && pokemon.evoChain) {
@@ -162,6 +180,8 @@ class PokeProfile extends Component {
     }
 
     getEvoChain(pokemon) {
+        // Loads the Evolution Chain
+
         if (pokemon && pokemon.evoChain) {
             return (
                 <div className="pokeprofile-evochain">
@@ -175,6 +195,8 @@ class PokeProfile extends Component {
     }
 
     selectPokemon = (id) => {
+        // Sends selected Pokémon back to parent
+        
         this.props.selectPokemon(id);
     }
 

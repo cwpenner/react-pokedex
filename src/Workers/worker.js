@@ -1,7 +1,7 @@
 const self = this;
 
 export default () => {
-    self.addEventListener('message', async event => {
+    self.addEventListener('message', event => {
         if (!event) {
             return;
         }

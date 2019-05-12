@@ -103,7 +103,6 @@ class App extends React.Component {
         } else {
             const response = await fetch('/pokemon/list?lang=' + lang);
             const data = await response.json();
-            console.log('Pokelist data', data);
     
             if (data) {
                 if (data.pokemon_entries) {
@@ -133,7 +132,6 @@ class App extends React.Component {
         } else {
             const response = await fetch('/pokemon/view?id=' + id + '&lang=' + lang);
             const data = await response.json();
-            console.log('Pokedata', data);
     
             if (data) {
                 this.setState({
@@ -166,7 +164,6 @@ class App extends React.Component {
         } else {
             const response = await fetch('/pokemon/getLanguages');
             const data = await response.json();
-            console.log('Language data', data);
     
             if (data && data.results) {
                 const languages = [];
@@ -184,7 +181,7 @@ class App extends React.Component {
 
     dropdown() {
         // Language dropdown
-        
+
         return (
             <select id="language" name="language" className="lang-dropdown" value={this.state.language} onChange={this.handleChange}>                
                 {this.state.languages.map(lang => {

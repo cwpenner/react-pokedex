@@ -9,9 +9,9 @@
 
 .pokeprofile-container {
     position: relative;
-    width: 1320px;
+    width: 920px;
     height: 100%;
-    left: calc(50% - 660px);
+    left: calc(50% - 460px);
 }
 
 .pokeprofile-header {
@@ -46,11 +46,11 @@
 
 .pokeprofile-description {
     float: left;
-    width: calc(100% - 450px);
+    width: calc(100% - 350px);
     font-style: italic;
     font-size: 20px;
     margin-left: 100px;
-    margin-top: 24px;
+    margin-top: 10px;
 }
 
 .pokeprofile-image-component {
@@ -78,12 +78,12 @@
 
 .pokeprofile-characteristics {
     float: left;
-    width: 500px;
+    width: 300px;
 }
 
 .pokeprofile-stats {
     float: left;
-    width: 500px;
+    width: 300px;
 }
 
 .pokeprofile-evochain {
